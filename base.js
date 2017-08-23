@@ -19,8 +19,6 @@ const Project = db.define('project', {
 })
 
 
-// BelongsTo
-User.belongsTo(Project);
 db.sync({force: true})
     .then(() => {
         utils.inform('Database Sync');

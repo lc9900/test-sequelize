@@ -19,6 +19,7 @@ const Project = db.define('project', {
 // BelongsTo
 // Many user to one project
 User.belongsTo(Project);
+var user1, project1;
 
 db.sync({force: true})
     .then(() => {
@@ -34,6 +35,20 @@ db.sync({force: true})
         console.log(`project.setUsers ${project.setUsers}`); // Undefined
         console.log(`project.setUser ${project.setUser}`); // Undefined
 
+        // project.name = 'Project X';
+        user.name = 'User X';
+        // return user.setProject(project);
+        return user.save()
+
+    }).then((user) => {
+        user1 = user;
+        var project = Project.build({})
+        project.name = "Project 1";
+        // return user1.setProject(project1); // No project ID inserted
+        return project.save()
+
+    }).then(project => {
+        return user1.setProject(project); // Now works
     }).catch(err => {
         throw err;
     })
