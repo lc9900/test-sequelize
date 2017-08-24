@@ -91,14 +91,27 @@ db.sync({force: true})
 
         return worker2.setManager(user1); // Sets worker2's managerId to user1
     }).then(() => {
-        console.log('=======================================')
-        return user1.setWorker(worker1);
+        return user1.setWorker([worker1, worker2]);
     }).then(() => {
-        console.log('=======================================')
-        return user1.setWorker(worker2);
+        return worker1.reload();
     }).then(() => {
-        console.log('=======================================')
-        return worker1.setManager(user1);
+        return worker2.reload();
+    }).then(() => {
+        return worker1.getManager()
+    }).then(manager => {
+        utils.inform(`Manager is ${manager.name}`);
+        return user1.getWorker()
+    })
+    .then(([w1, w2]) => {
+        utils.inform(w1.name);
+        utils.inform(w2.name);
+    })
+    .then(() => {
+        user1.setProject(null);
+    })
+    .then(() => {
+        // user1.setWorker(null); // Does the same thing
+        user1.setWorker([]);
     })
     .catch(err => {
         throw err;
